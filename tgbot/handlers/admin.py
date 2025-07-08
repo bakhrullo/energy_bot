@@ -19,7 +19,7 @@ from tgbot.services.pdf import pdf_create, pdf_create_percent, pdf_create_specia
 async def start(m: Message, config):
     user = await get_agent(config, m.from_user.id)
     await m.answer(f"Здравствуйте, {m.from_user.full_name} 👋\n"
-                   f"Рады видеть вас в боте Support Samarkand\n\n"
+                   f"Рады видеть вас в боте Star Beverages\n\n"
                    f"Пожалуйста, выберите нужный раздел с помощью кнопок ниже 👇", reply_markup=menu_kb(user["is_boss"]))
     await MainMenu.get_menu.set()
 
@@ -68,7 +68,7 @@ async def get_project(c: CallbackQuery, state: FSMContext, config):
     project_db = await get_project_db(c.data.split("_")[0], config)
     counter, agent = await count(config), await get_agent(config, c.from_user.id)
     key = f"-{agent['uniq']}"
-    number = f"{counter}/{project_db['uniq']}{key if agent['uniq'] is not None else ''}"
+    number = f"{project_db['uniq']}/01-{counter}"
     await state.update_data(number=number, name=c.data.split("_")[1], id=c.data.split("_")[0],
                             signature=project_db["signature"], is_special=project_db["is_special"])
     if project_db["is_special"]:
@@ -94,8 +94,9 @@ async def get_conf(c: CallbackQuery):
 async def get_inn(m: Message, state: FSMContext, config):
     token = await didox_get_token(config)
     res = await get_info(config, m.text, token['token'])
+    print(res)
     try:
-        if res["inn"] is None:
+        if len(res["inn"]) < 3:
             return await m.answer("Введён неверный ИНН. Пожалуйста, проверьте и введите заново ❌", reply_markup=back_kb)
     except:
         return await m.answer("Введён неверный ИНН. Пожалуйста, проверьте и введите заново ❌", reply_markup=back_kb)
@@ -237,7 +238,7 @@ async def get_inn_percent(m: Message, state: FSMContext, config):
     counter, agent = await count(config), await get_agent(config, m.from_user.id)
     data = await state.get_data()
     key = f"-{agent['uniq']}"
-    number = f"{counter}/{data['project_uniq']}{key if agent['uniq'] is not None else ''}"
+    number = f"{data['project_uniq']}/01-{counter}"
     await m.answer(
         f"Номер договора:\n[{number} от {datetime.now().strftime('%d.%m.%Y')}]✅\nИНН организации:\n[{m.text}]✅\nНазвание фирмы:\n[{res['shortName']}]✅\nНазвание проекта:\n[{data['project_name']}]✅\n"
         f"Для подтверждения используйте кнопки ниже 👇",
