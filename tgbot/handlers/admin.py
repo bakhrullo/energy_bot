@@ -94,7 +94,10 @@ async def get_conf(c: CallbackQuery):
 async def get_inn(m: Message, state: FSMContext, config):
     token = await didox_get_token(config)
     res = await get_info(config, m.text, token['token'])
-    if res["inn"] is None:
+    try:
+        if res["inn"] is None:
+            return await m.answer("Введён неверный ИНН. Пожалуйста, проверьте и введите заново ❌", reply_markup=back_kb)
+    except:
         return await m.answer("Введён неверный ИНН. Пожалуйста, проверьте и введите заново ❌", reply_markup=back_kb)
     data = await state.get_data()
     text = f"Номер договора:\n[{data['number']} от {datetime.now().strftime('%d.%m.%Y')}]✅\nИНН организации:\n[{m.text}]✅\nНазвание фирмы:\n[{res['shortName']}]✅\nНазвание проекта:\n[{data['name']}]✅\n"

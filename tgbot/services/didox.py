@@ -53,12 +53,12 @@ async def didox_create_doc(config, doc_name, doc_no, doc_inn):
             },
             "Seller": {
                 "TaxGap": None,
-                "Name": "«SUPPORT SAMARQAND» MCHJ",
+                "Name": "«STAR BEVERAGES» MCHJ",
                 "BranchCode": "",
                 "BranchName": "",
                 "Address": "ARNASOY KO`CHASI, 1A-UY"
             },
-            "SellerTin": "300974584",
+            "SellerTin": "312014821",
             "BuyerTin": doc_inn
         },
             "document": f"data:application/pdf;base64,{encoded_doc}"}) as \
